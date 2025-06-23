@@ -1,0 +1,11 @@
+{
+  "features": {
+    "ghcr.io/devcontainers/features/vscode-extensions:1": {
+      "extensions": [
+        "ms-python.python",
+        "ms-azuretools.vscode-docker",
+        "ms-toolsai.jupyter"
+      ]
+    }
+  }
+}
