@@ -22,10 +22,8 @@ WORKDIR /app
 COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
 
-# Copy the application code
-COPY . /project_code
-
-ENV PYTHONPATH="/project_code:${PYTHONPATH}"
+# Copy the application code - pay attention to the workdir we set earlier
+COPY server.py server.py 
 
 # Set the default command
-CMD ["python", "/project_code/mcp_metric_server/server.py"]
+CMD ["python", "server.py"]

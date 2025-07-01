@@ -1,3 +1,7 @@
+from pathlib import Path
+import sys
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+
 import warnings
 from fastmcp import FastMCP
 from langchain_openai import ChatOpenAI
@@ -21,7 +25,7 @@ SUPPORTED_EVAL_FRAMEWORKS = ["ragas"]
 def calculate_faithfulness(
     user_input: Annotated[str, "The original user question or input."],
     response: Annotated[str, "The generated answer to be evaluated."],
-    context: Annotated[str, "The retrieved context used to support the answer."],
+    retrieved_contexts: Annotated[str, "The retrieved context used to support the answer."],
     eval_framework: Annotated[str, "The evaluation framework to use, supported: {SUPPORTED_EVAL_FRAMEWORKS}."],
     llm: Annotated[str, "Identify the LLM-as-a-Judge, supported: {}".format(SUPPORTED_LLMS)],
 ) -> float:
@@ -54,7 +58,7 @@ def calculate_faithfulness(
             f"Supported frameworks: {SUPPORTED_EVAL_FRAMEWORKS}. "
             f"Defaulting to {SUPPORTED_EVAL_FRAMEWORKS[0]}"
         )
-    return round(score_faithfulness(user_input, response, context, llm=get_llm(llm)), 4)
+    return round(score_faithfulness(user_input, response, retrieved_contexts, llm=get_llm(llm)), 4)
 
 @mcp.tool()
 def calculate_answer_relevancy(

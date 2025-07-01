@@ -3,3 +3,6 @@ fastmcp
 ragas
 langchain
 langchain-openai
+python-dotenv
+langchain_mcp_adapters
+langgraph

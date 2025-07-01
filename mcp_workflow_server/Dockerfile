@@ -28,4 +28,4 @@ COPY . /project_code
 ENV PYTHONPATH="/project_code:${PYTHONPATH}"
 
 # Set the default command
-CMD ["python", "/project_code/mcp_metric_server/server.py"]
+CMD ["python", "/project_code/mcp_workflow_server/server.py"]

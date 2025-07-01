@@ -47,7 +47,7 @@ async def test_ragas():
     faith_args = {
         "user_input": "What city is the Eiffel Tower located in?",
         "response": "The Eiffel Tower is located in Berlin.",
-        "context": "The Eiffel Tower is located in Paris, France.",
+        "retrieved_contexts": "The Eiffel Tower is located in Paris, France.",
         "eval_framework": framework,
         "llm": llm
     }
@@ -106,5 +106,5 @@ async def test_ragas():
     assert correctness_score  is not None
 
 if __name__ == "__main__":
-    test_ragas()
+    asyncio.run(test_ragas())
 
