@@ -56,7 +56,7 @@ def main():
 
     # Define MCP servers with SSE transport protocol
     server_configs = {
-        "workflow_server": {
+        "evaluation_server": {
             "url": "http://localhost:8001/mcp",
             "transport": "streamable_http",
         },
@@ -75,23 +75,34 @@ def main():
     system_prompt = (
         "You are an advanced AI assistant. "
         "Use the context server to recieve context to your questions"
-        "After you created an answer, use the workflow_server to execute the answer."
-        "The workflow server will return metrics that will allow you to evaluate your answer."
+        "After you created an answer, use the reference data server to get the ground truth."
+        "Finally, evaluate your answer with the ground truth and context using the evaluation_server."
         "Return your answer and the metrics in a single response."
     )
 
     try:
+        print(' '*10 +"#"*115)
+        print(' '*25 +"Welcome to the Agent Evaluation Demo!")
+        print(' '*25 +"The Agent will evaluate itself via connecting to a MCP evaluation service server.")
+        print(' '*25 +"The Agent is connected to the following MCP servers:")
+        for name, config in server_configs.items():
+            print(' '*30 + f"{name}: {config['url']} (Transport: {config['transport']})")
+        print(' '*10 + "#"*115)
         while True:
-            user_input = input("What is the current status of AI")
+            print("Type your question or 'exit' to quit:")
+            user_input = input("What is the current status of AI?")
             if not user_input.strip():
                 user_input = "What is the current status of AI"
-            print(user_input)
+            print("Your question is: {}".format(user_input))
             if user_input.strip().lower() in ("exit", "quit"):
                 logger.info("Shutting down assistant.")
                 break
             response = asyncio.run(agent.ainvoke({"messages": [SystemMessage(content=system_prompt),
                                                                HumanMessage(content=user_input)]}))
-            pprint.pprint(response)
+            
+            pprint.pprint(response, indent=2)
+            print('\n\n' + ' '*10 + "#"*25 + "Final Agent step:" + "#"*25 )
+            print(response["messages"][-1].content)
     except KeyboardInterrupt:
         logger.info("Interrupted by user. Exiting.")
 

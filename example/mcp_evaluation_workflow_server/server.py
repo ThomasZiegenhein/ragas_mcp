@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 import sys
 
@@ -10,7 +11,7 @@ import asyncio
 from mcp.client.streamable_http import streamablehttp_client
 from mcp import ClientSession
 
-from mcp_metric_server.my_llms import SUPPORTED_LLMS
+from mcp_metric_server.my_llms import SUPPORTED_LLMS, SUPPORTED_EMBEDDINGS
 
 # Initialize MCP server
 mcp = FastMCP("LLM Evaluation Workflow Server")
@@ -75,7 +76,7 @@ def evaluate_question_answer_with_context_workflow(
     eval_framework: Annotated[str, "The evaluation framework to use, supported: {SUPPORTED_EVAL_FRAMEWORKS}."],
     llm: Annotated[str, "Identify the LLM-as-a-Judge, supported: {}".format(SUPPORTED_LLMS)],
     embedding_model: Annotated[str, "The embedding model to use for semantic similarity, supported: {SUPPORTED_EMBEDDINGS}."]
-) -> float:
+) -> dict:
     """
     Calculates the scores for a question-answering task with context.
 
@@ -87,7 +88,7 @@ def evaluate_question_answer_with_context_workflow(
 
     Example call:
     {
-        "tool": "calculate_qa_with_context_workflow",
+        "tool": "evaluate_question_answer_with_context_workflow",
         "args": {
             "user_input": "What city is the Eiffel Tower located in?",
             "response": "The Eiffel Tower is located in Berlin.",
@@ -98,6 +99,14 @@ def evaluate_question_answer_with_context_workflow(
         }
     }
     """
+
+    # Sanitize inputs
+    if eval_framework not in SUPPORTED_EVAL_FRAMEWORKS:
+        eval_framework = SUPPORTED_EVAL_FRAMEWORKS[0]
+    if llm not in SUPPORTED_LLMS:
+        llm = SUPPORTED_LLMS[0]
+    if embedding_model not in SUPPORTED_EMBEDDINGS:
+        embedding_model = SUPPORTED_EMBEDDINGS[0]
 
     # Gather the metrics in our workflow and their settings
     jobs= [

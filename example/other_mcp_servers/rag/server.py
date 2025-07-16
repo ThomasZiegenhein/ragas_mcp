@@ -8,7 +8,7 @@ mcp = FastMCP("Context Retrieval Server")
 @mcp.tool()
 def get_context(
     query: Annotated[str, "The query the context is retrieved for."],
-) -> float:
+) -> str:
     """
     Retrieves context to a query.
 

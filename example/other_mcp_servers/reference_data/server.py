@@ -8,7 +8,7 @@ mcp = FastMCP("Ground Truth Server")
 @mcp.tool()
 def get_reference_data(
     id: Annotated[str, "An id that will identify the ground truth."],
-) -> float:
+) -> str:
     """
     Retrieves context to a query.
 

@@ -52,6 +52,7 @@ async def test_ragas():
         "llm": llm
     }
     faith_score = await call_mcp("calculate_faithfulness", faith_args)
+    print(faith_score)
     assert faith_score is not None
 
 
@@ -65,6 +66,7 @@ async def test_ragas():
         "strictness": 3
     }
     relevancy_score = await call_mcp("calculate_answer_relevancy", relevancy_args)
+    print(relevancy_score)
     assert relevancy_score is not None
 
 
@@ -77,6 +79,7 @@ async def test_ragas():
         "llm": llm
     }
     precision_score = await call_mcp("calculate_context_precision", precision_args)
+    print(precision_score)
     assert precision_score is not None
 
     
@@ -90,6 +93,7 @@ async def test_ragas():
         "llm": llm
     }
     recall_score = await call_mcp("calculate_context_recall", recall_args)
+    print(recall_score)
     assert recall_score  is not None
 
 
@@ -103,7 +107,9 @@ async def test_ragas():
         "embedding_model": embedding_model,
     }
     correctness_score = await call_mcp("calculate_answer_correctness", correctness_args)
+    print(correctness_score)
     assert correctness_score  is not None
+    
 
 if __name__ == "__main__":
     asyncio.run(test_ragas())

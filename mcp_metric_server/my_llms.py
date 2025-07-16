@@ -1,4 +1,5 @@
 import os
+import warnings
 from langchain_openai import ChatOpenAI
 
 from dotenv import load_dotenv
@@ -11,6 +12,7 @@ def get_llm(llm_ident:str):
     """
     Returns the LLM instance based on the identifier.
     """
+    # defaulting to keep the code simple, extend as needed
     if not os.getenv("OPENAI_API_KEY"):
         raise EnvironmentError("OPENAI_API_KEY is not set in the environment. Please set it in your .env file or environment variables.")
 
@@ -25,11 +27,12 @@ def get_embedding_model(model_name: str):
     Returns the embedding model instance based on the model name.
     """
 
+    # defaulting to keep the code simple, extend as needed
     if not os.getenv("OPENAI_API_KEY"):
         raise EnvironmentError("OPENAI_API_KEY is not set in the environment. Please set it in your .env file or environment variables.")
-
-    if model_name == "text-embedding-3-small":
-        from langchain_openai import OpenAIEmbeddings
-        return OpenAIEmbeddings(model=model_name)
-    else:
-        raise ValueError(f"Embedding model '{model_name}' is not recognized.")
+    # defaulting to keep the code simple, extend as needed
+    if model_name != "text-embedding-3-small":
+        model_name = "text-embedding-3-small"
+        warnings.warn(f"Unsupported embedding model '{model_name}'. Defaulting to 'text-embedding-3-small'.")
+    from langchain_openai import OpenAIEmbeddings
+    return OpenAIEmbeddings(model=model_name)
