@@ -50,7 +50,7 @@ python agent/agent.py
 ## Architecture for the example
 
 ```mermaid
-flowchart LR
+flowchart TD
     User["User"]
     Agent["LangChain Agent"]
     subgraph MCP_Metric_Server["MCP RAGAS Metric Server"]
@@ -63,7 +63,7 @@ flowchart LR
     subgraph ContextR["MCP Contect Retrieval Server"]
         CR["Tool: get_context"]
     end
-    subgraph EvalWF["MCP Pre-defined Eval Workflows]
+    subgraph EvalWF["MCP Pre-defined Evaluation"]
         QA["Tool: evaluate_question_answer_with_context_workflow"]
     end
     subgraph ReferenceR["MCP Reference Server"]
@@ -71,13 +71,10 @@ flowchart LR
     end
 
     User --question--> Agent
-    Agent --> EvalWF
-    Workflow --> Metric
-    Workflow --> Context
-    Workflow --> Reference
-    Metric <--> Workflow
-    Context <--> Workflow
-    Reference <--> Workflow
+    Agent <--context--> ContextR
+    Agent <--reference--> ReferenceR
+    Agent <--evaluation--> EvalWF
+    EvalWF --> MCP_Metric_Server
 ```
 
 ## License
@@ -87,4 +84,4 @@ MIT
 ---
 
 **Questions or feedback?**  
-Open an issue or reach out via the Medium
+Open an issue or reach out!
