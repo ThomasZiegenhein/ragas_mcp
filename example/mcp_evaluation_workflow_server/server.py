@@ -11,7 +11,7 @@ import asyncio
 from mcp.client.streamable_http import streamablehttp_client
 from mcp import ClientSession
 
-from mcp_metric_server.my_llms import SUPPORTED_LLMS, SUPPORTED_EMBEDDINGS
+from my_llms import SUPPORTED_LLMS, SUPPORTED_EMBEDDINGS
 
 # Initialize MCP server
 mcp = FastMCP("LLM Evaluation Workflow Server")

@@ -6,3 +6,5 @@ langchain-openai
 python-dotenv
 langchain_mcp_adapters
 langgraph
+pytest
+pytest-asyncio

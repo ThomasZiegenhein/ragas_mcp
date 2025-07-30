@@ -112,5 +112,6 @@ async def test_ragas():
     
 
 if __name__ == "__main__":
+    test_mcp_server_running()
     asyncio.run(test_ragas())
 

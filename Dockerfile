@@ -7,7 +7,7 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y build-essential
 
 # Copy only requirements.txt to leverage Docker cache
-COPY requirements.txt .
+COPY src/requirements.txt ./requirements.txt
 
 # Install Python dependencies
 RUN pip install --upgrade pip \
@@ -23,9 +23,9 @@ COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/pytho
 COPY --from=builder /usr/local/bin /usr/local/bin
 
 # Copy the application code
-COPY . /project_code
+COPY src/ /mcp_ragas/
 
-ENV PYTHONPATH="/project_code:${PYTHONPATH}"
+ENV PYTHONPATH="/mcp_ragas"
 
 # Set the default command
-CMD ["python", "/project_code/mcp_metric_server/server.py"]
+CMD ["python", "/mcp_ragas/server.py"]

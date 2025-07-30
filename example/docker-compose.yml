@@ -1,8 +1,11 @@
+# This file was moved from the project root to the example/ folder.
+# All build contexts and dockerfile paths have been updated accordingly.
+
 services:
   mcp_metric_server:
     build:
-      context: .
-      dockerfile: mcp_metric_server/Dockerfile
+      context: ../src/
+      dockerfile: Dockerfile
     container_name: mcp_metric_server
     ports:
       - "8000:8000"
@@ -14,8 +17,8 @@ services:
 
   mcp_workflow_server:
     build:
-      context: .
-      dockerfile: example/mcp_evaluation_workflow_server/Dockerfile
+      context: mcp_evaluation_workflow_server
+      dockerfile: Dockerfile
     container_name: mcp_workflow_server
     ports:
       - "8001:8000"
@@ -27,7 +30,7 @@ services:
 
   mcp_context_server:
     build:
-      context: example/other_mcp_servers/rag
+      context: other_mcp_servers/rag
       dockerfile: Dockerfile
     container_name: mcp_context_server
     ports:
@@ -38,7 +41,7 @@ services:
 
   mcp_reference_data_server:
     build:
-      context: example/other_mcp_servers/reference_data
+      context: other_mcp_servers/reference_data
       dockerfile: Dockerfile
     container_name: mcp_reference_data_server
     ports:

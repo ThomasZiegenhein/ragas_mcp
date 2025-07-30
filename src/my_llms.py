@@ -3,10 +3,11 @@ import json
 import yaml
 
 from langchain_openai import ChatOpenAI
+
 try:
-    from langchain_anthropic import Anthropic
+    from langchain_anthropic import ChatAnthropic
 except ImportError:
-    Anthropic = None
+    ChatAnthropic = None
 
 from langchain_openai import OpenAIEmbeddings
 
@@ -23,6 +24,16 @@ MODEL_DEFAULTS = {
     "custom":   "gpt-4o-mini",
     "anthropic": "claude-2",
 }
+
+SUPPORTED_LLMS = {
+    "openai":   ["gpt-4o-mini"],
+    "azure":    ["gpt-4o-mini"],
+    "lite":     ["gpt-4o-mini"],
+    "custom":   ["gpt-4o-mini"],
+    "anthropic": ["claude-2"],
+}
+
+
 # Supported embedding providers and their default embedding models
 EMBEDDING_MODEL_DEFAULTS = {
     "openai":   "text-embedding-3-small",
@@ -31,6 +42,12 @@ EMBEDDING_MODEL_DEFAULTS = {
     "custom":   "text-embedding-3-small",
     # anthropic: no embedding support
 }
+
+# Supported embedding models (flattened list for annotation)
+SUPPORTED_EMBEDDINGS = [
+    EMBEDDING_MODEL_DEFAULTS[provider]
+    for provider in EMBEDDING_MODEL_DEFAULTS
+]
 
 
 def detect_provider() -> str:
@@ -114,7 +131,7 @@ def detect_embedding_provider() -> str:
     return "openai"
 
 
-def get_llm():
+def get_llm(model: str = None):
     """
     Instantiate an LLM client based on chosen provider and loaded settings.
     """
@@ -142,25 +159,26 @@ def get_llm():
 
         return ChatOpenAI(**params)
 
+
     if provider == "anthropic":
-        if Anthropic is None:
+        if ChatAnthropic is None:
             raise ImportError(
                 "Anthropic support requested but 'langchain_anthropic' is not installed."
             )
         anth_params = {
             "model":                llm_args["model"],
             "temperature":          llm_args["temperature"],
-            "max_tokens_to_sample": llm_args["max_tokens"],
+            "max_tokens":           llm_args["max_tokens"],
             "anthropic_api_key":    api_key,
         }
         if os.getenv("ANTHROPIC_API_BASE"):
             anth_params["anthropic_api_base"] = os.getenv("ANTHROPIC_API_BASE")
-        return Anthropic(**anth_params)
+        return ChatAnthropic(**anth_params)
 
     raise EnvironmentError(f"Unhandled LLM_PROVIDER '{provider}'.")
 
 
-def get_embedding_model():
+def get_embedding_model(model:str = None) -> OpenAIEmbeddings:
     """
     Instantiate an embedding model client based on chosen provider and settings.
     """
